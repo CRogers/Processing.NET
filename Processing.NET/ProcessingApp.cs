@@ -13,8 +13,6 @@ namespace Processing.NET
 
         protected ProcessingApp() : base(800, 600, GraphicsMode.Default, "Processing.NET")
         {
-            InitialSetup();
-            Setup();
         }
 
 
@@ -35,6 +33,8 @@ namespace Processing.NET
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
+            InitialSetup();
+            Setup();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -45,7 +45,10 @@ namespace Processing.NET
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+
             Draw();
+
+            SwapBuffers();
         }
 
 
@@ -54,6 +57,7 @@ namespace Processing.NET
         {
             background = c;
             GL.ClearColor(c);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
         }
     }
 }

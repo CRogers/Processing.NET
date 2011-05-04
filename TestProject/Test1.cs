@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Processing.NET;
 
 namespace TestProject
@@ -10,7 +9,8 @@ namespace TestProject
 
         protected override void Draw()
         {
-            Background(Color.FromArgb(step, step, step = (step + 1) % 255));
+            //Background(Color.FromArgb(step, step, step));
+            step = (step + 1)%255;
         }
     }
 }
