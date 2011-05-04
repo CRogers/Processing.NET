@@ -9,7 +9,9 @@ namespace Processing.NET
     public abstract class ProcessingApp : GameWindow
     {
         private Color background;
-        private Color stroke;
+
+        protected Color Stroke { get; set; }
+        protected Color Fill { get; set; }
 
         protected ProcessingApp() : base(800, 600, GraphicsMode.Default, "Processing.NET")
         {
@@ -58,6 +60,12 @@ namespace Processing.NET
             background = c;
             GL.ClearColor(c);
             GL.Clear(ClearBufferMask.ColorBufferBit);
+        }
+
+        protected void Rect(float x, float y, float width, float height)
+        {
+            GL.Color4(Fill);
+            GL.Rect(x,y,x+width,y+height);
         }
     }
 }
