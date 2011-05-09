@@ -38,6 +38,7 @@ namespace Processing.NET
             InitialSetup();
             Setup();
         }
+        
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
@@ -65,7 +66,15 @@ namespace Processing.NET
         protected void Rect(float x, float y, float width, float height)
         {
             GL.Color4(Fill);
-            GL.Rect(x,y,x+width,y+height);
+
+            GL.Begin(BeginMode.LineLoop);
+            {
+                GL.Vertex2(x,y);
+                GL.Vertex2(x+width,y);
+                GL.Vertex2(x+width,y+height);
+                GL.Vertex2(x,y+height);
+            }
+            GL.End();
         }
     }
 }
