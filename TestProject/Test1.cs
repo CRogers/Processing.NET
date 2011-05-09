@@ -15,6 +15,9 @@ namespace TestProject
 
             Fill = Color.Crimson;
             Rect(x = (++x % Width),y = (++y % Height),100,100);
+
+            Fill = Color.ForestGreen;
+            Point(Width-100, 50);
         }
     }
 }

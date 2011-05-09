@@ -93,5 +93,22 @@ namespace Processing.NET
 
             GL.Rect(x,y,x+width,y+height);
         }
+
+        protected void Point(double x, double y)
+        {
+            Point(x,y,0.0);
+        }
+
+        protected void Point(double x, double y, double z)
+        {
+            Sxy(ref x, ref y);
+            GL.Color4(Fill);
+
+            GL.Begin(BeginMode.Points);
+            {
+                GL.Vertex3(x,y,z);
+            }
+            GL.End();
+        }
     }
 }
