@@ -18,6 +18,9 @@ namespace TestProject
 
             Fill = Color.ForestGreen;
             Point(Width-100, 50);
+
+            Stroke = Color.Green;
+            Line(300,10,500,300);
         }
     }
 }

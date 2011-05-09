@@ -110,5 +110,24 @@ namespace Processing.NET
             }
             GL.End();
         }
+
+        protected void Line(double x1, double y1, double x2, double y2)
+        {
+            Line(x1,y1,0.0,x2,y2,0.0);
+        }
+
+        protected void Line(double x1, double y1, double z1, double x2, double y2, double z2)
+        {
+            Sxy(ref x1, ref y1);
+            Sxy(ref x2, ref y2);
+            GL.Color4(Stroke);
+
+            GL.Begin(BeginMode.Lines);
+            {
+                GL.Vertex3(x1,y1,z1);
+                GL.Vertex3(x2,y2,z2);
+            }
+            GL.End();
+        }
     }
 }
