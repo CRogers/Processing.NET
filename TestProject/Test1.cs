@@ -6,6 +6,7 @@ namespace TestProject
     public class Test1 : ProcessingApp
     {
         private int step = 0;
+        private int x = 0, y = 0;
 
         protected override void Draw()
         {
@@ -13,7 +14,7 @@ namespace TestProject
             step = (step + 1)%255;
 
             Fill = Color.Crimson;
-            Rect(10,10,200,200);
+            Rect(x = (++x % Width),y = (++y % Height),100,100);
         }
     }
 }
