@@ -22,7 +22,9 @@ namespace TestProject
             Stroke = Color.Green;
             Line(300,10,500,300);
 
-
+            Stroke = Color.DeepSkyBlue;
+            Fill = Color.DodgerBlue;
+            Triangle(100,100,150,100,125,150);
         }
     }
 }

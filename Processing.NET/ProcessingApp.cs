@@ -153,5 +153,30 @@ namespace Processing.NET
             }
             GL.End();
         }
+
+        protected void Triangle(double x1, double y1, double x2, double y2, double x3, double y3)
+        {
+            Sxy(ref x1, ref y1);
+            Sxy(ref x2, ref y2);
+            Sxy(ref x3, ref y3);
+
+            GL.Color4(Fill);
+            GL.Begin(BeginMode.Triangles);
+            {
+                GL.Vertex2(x1, y1);
+                GL.Vertex2(x2, y2);
+                GL.Vertex2(x3, y3);
+            }
+            GL.End();
+
+            GL.Color4(Stroke);
+            GL.Begin(BeginMode.LineLoop);
+            {
+                GL.Vertex2(x1, y1);
+                GL.Vertex2(x2, y2);
+                GL.Vertex2(x3, y3);
+            }
+            GL.End();
+        }
     }
 }
