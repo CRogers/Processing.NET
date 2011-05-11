@@ -87,11 +87,7 @@ namespace Processing.NET
 
         protected void Rect(double x, double y, double width, double height)
         {
-            Sxy(ref x, ref y);
-            Swh(ref width, ref height);
-            GL.Color4(Fill);
-
-            GL.Rect(x,y,x+width,y+height);
+            Quad(x, y, x + width, y, x + width, y + height, x, y + height);
         }
 
         protected void Point(double x, double y)
@@ -126,6 +122,34 @@ namespace Processing.NET
             {
                 GL.Vertex3(x1,y1,z1);
                 GL.Vertex3(x2,y2,z2);
+            }
+            GL.End();
+        }
+
+        protected void Quad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+        {
+            Sxy(ref x1, ref y1);
+            Sxy(ref x2, ref y2);
+            Sxy(ref x3, ref y3);
+            Sxy(ref x4, ref y4);
+            
+            GL.Color4(Fill);
+            GL.Begin(BeginMode.Quads);
+            {
+                GL.Vertex2(x1, y1);
+                GL.Vertex2(x2, y2);
+                GL.Vertex2(x3, y3);
+                GL.Vertex2(x4, y4);
+            }
+            GL.End();
+
+            GL.Color4(Stroke);
+            GL.Begin(BeginMode.LineLoop);
+            {
+                GL.Vertex2(x1,y1);
+                GL.Vertex2(x2,y2);
+                GL.Vertex2(x3,y3);
+                GL.Vertex2(x4,y4);
             }
             GL.End();
         }

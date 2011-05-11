@@ -21,6 +21,8 @@ namespace TestProject
 
             Stroke = Color.Green;
             Line(300,10,500,300);
+
+
         }
     }
 }
