@@ -6,11 +6,19 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
+using Matrix3 = System.Tuple<OpenTK.Matrix4d, OpenTK.Matrix4d, OpenTK.Matrix4d>;
+
 namespace Processing.NET
 {
     public abstract class ProcessingApp : GameWindow
     {
         private Color background;
+        private Matrix4d translation = Matrix4d.Identity;
+        private Matrix4d rotation = Matrix4d.Identity;
+        private Matrix4d scaling = Matrix4d.Identity;
+        private Matrix4d matrix = Matrix4d.Identity;
+
+        private Stack<Matrix3> matrixStack = new Stack<Matrix3>();
 
         protected Color Stroke { get; set; }
         protected Color Fill { get; set; }
@@ -90,8 +98,8 @@ namespace Processing.NET
 
         private void Sxy(ref double x, ref double y)
         {
-            x = x/Width*2 - 1.0;
-            y = 1.0 - y/Height*2;
+            x = x / Width * 2 - 1.0;
+            y = 1.0 - y / Height * 2;
         }
 
         private void Swh(ref double w, ref double h)
@@ -290,6 +298,57 @@ namespace Processing.NET
             }
 
             beginMode = null;
+        }
+
+
+        private void UpdateMatrix()
+        {
+            matrix = rotation * translation * scaling;
+            GL.MultMatrix(ref matrix);
+        }
+
+        public void PushMatrix()
+        {
+            matrixStack.Push(Tuple.Create(rotation, translation, scaling));
+            GL.PushMatrix();
+            UpdateMatrix();
+        }
+
+        public void PopMatrix()
+        {
+            var t = matrixStack.Pop();
+            rotation = t.Item1;
+            translation = t.Item2;
+            scaling = t.Item3;
+            GL.PopMatrix();
+            UpdateMatrix();
+        }
+
+        public void ResetMatrix()
+        {
+            rotation = Matrix4d.Identity;
+            translation = Matrix4d.Identity;
+            scaling = Matrix4d.Identity;
+            UpdateMatrix();
+        }
+
+        public void Rotate(double angle)
+        {
+            rotation *= Matrix4d.Rotate(Vector3d.UnitZ, angle);
+            UpdateMatrix();
+        }
+
+        public void Scale(double factor)
+        {
+            scaling *= Matrix4d.Scale(factor);
+            UpdateMatrix();
+        }
+
+        public void Translate(double x, double y)
+        {
+            Swh(ref x, ref y);
+            translation *= Matrix4d.CreateTranslation(x, y, 0);
+            UpdateMatrix();
         }
     }
 }

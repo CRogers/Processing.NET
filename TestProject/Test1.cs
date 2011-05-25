@@ -24,8 +24,11 @@ namespace TestProject
             Fill = Color.ForestGreen;
             Point(Width-100, 50);
 
+            PushMatrix();
+            Translate(100, 50);
             Stroke = Color.Green;
             Line(300,10,500,300);
+            PopMatrix();
 
             Stroke = Color.DeepSkyBlue;
             Fill = Color.DodgerBlue;
@@ -39,7 +42,11 @@ namespace TestProject
             //Vertex(370,370);
             //EndShape();
 
-            Ellipse(350,300,50+step,200);
+            PushMatrix();
+            Rotate(step/255.0*TwoPI);
+            Scale(0.999);
+            Ellipse(300,300,50+step/2,200);
+            PopMatrix();
 
             Arc(100,100,50,50,HalfPI/2,HalfPI*3);
         }
