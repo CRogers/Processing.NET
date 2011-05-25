@@ -19,6 +19,18 @@ namespace Processing.NET
         protected const double PI = Math.PI;
         protected const double TwoPI = Math.PI*2;
 
+
+        protected double MouseX
+        {
+            get { return Mouse.X; }
+        }
+
+        protected double MouseY
+        {
+            get { return Mouse.Y;  }
+        }
+
+
         protected ProcessingApp(int smoothSamples = 1) : base(800, 600, new GraphicsMode(32,24,8,smoothSamples), "Processing.NET")
         {
         }
