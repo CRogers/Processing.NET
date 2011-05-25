@@ -20,6 +20,8 @@ namespace Processing.NET
 
         private Stack<Matrix3> matrixStack = new Stack<Matrix3>();
 
+        private static Random random = new Random();
+
         protected Color Stroke { get; set; }
         protected Color Fill { get; set; }
 
@@ -307,14 +309,14 @@ namespace Processing.NET
             GL.MultMatrix(ref matrix);
         }
 
-        public void PushMatrix()
+        protected void PushMatrix()
         {
             matrixStack.Push(Tuple.Create(rotation, translation, scaling));
             GL.PushMatrix();
             UpdateMatrix();
         }
 
-        public void PopMatrix()
+        protected void PopMatrix()
         {
             var t = matrixStack.Pop();
             rotation = t.Item1;
@@ -324,7 +326,7 @@ namespace Processing.NET
             UpdateMatrix();
         }
 
-        public void ResetMatrix()
+        protected void ResetMatrix()
         {
             rotation = Matrix4d.Identity;
             translation = Matrix4d.Identity;
@@ -332,23 +334,61 @@ namespace Processing.NET
             UpdateMatrix();
         }
 
-        public void Rotate(double angle)
+        protected void Rotate(double angle)
         {
             rotation *= Matrix4d.Rotate(Vector3d.UnitZ, angle);
             UpdateMatrix();
         }
 
-        public void Scale(double factor)
+        protected void Scale(double factor)
         {
             scaling *= Matrix4d.Scale(factor);
             UpdateMatrix();
         }
 
-        public void Translate(double x, double y)
+        protected void Translate(double x, double y)
         {
             Swh(ref x, ref y);
             translation *= Matrix4d.CreateTranslation(x, y, 0);
             UpdateMatrix();
+        }
+
+
+        protected double Random(double high)
+        {
+            return random.NextDouble() * high;
+        }
+
+        protected double Random(double low, double high)
+        {
+            return low + random.NextDouble() * high;
+        }
+
+        protected double Noise(double x, double y, double z)
+        {
+            // http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/perlin-noise-math-faq.html
+
+            var pv = new PVector(x, y, z);
+
+            // Find the four points around (x,y,z)
+            double xf = Math.Floor(x);
+            double yf = Math.Floor(y);
+            double zf = Math.Floor(z);
+            var points = new[] 
+            { 
+                new PVector(xf, yf, zf),     new PVector(xf, yf, zf+1),    new PVector(xf, yf+1, zf),
+                new PVector(xf, yf+1, zf+1), new PVector(xf+1, yf, zf),    new PVector(xf+1, yf, zf+1),
+                new PVector(xf+1, yf+1, zf), new PVector(xf+1, yf+1, zf+1)
+            };
+
+            var a = new double[8];
+            for(int i = 0; i < 8; i++)
+            {
+                var grad = new PVector(Random(1.0), Random(1.0));
+                a[i] = grad * (pv - points[i]);
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
