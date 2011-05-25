@@ -30,6 +30,8 @@ namespace Processing.NET
             get { return Mouse.Y;  }
         }
 
+        protected double PMouseX { get; private set; }
+        protected double PMouseY { get; private set; }
 
         protected ProcessingApp(int smoothSamples = 1) : base(800, 600, new GraphicsMode(32,24,8,smoothSamples), "Processing.NET")
         {
@@ -79,6 +81,9 @@ namespace Processing.NET
             Draw();
 
             SwapBuffers();
+
+            PMouseX = MouseX;
+            PMouseY = MouseY;
         }
 
 
