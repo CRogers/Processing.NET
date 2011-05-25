@@ -25,6 +25,14 @@ namespace TestProject
             Stroke = Color.DeepSkyBlue;
             Fill = Color.DodgerBlue;
             Triangle(100,100,150,100,125,150);
+
+            Stroke = Color.CornflowerBlue;
+            Fill = Color.DarkViolet;
+            BeginShape(ShapeMode.Lines);
+            Vertex(200,200);
+            Vertex(400,400);
+            Vertex(370,370);
+            EndShape();
         }
     }
 }

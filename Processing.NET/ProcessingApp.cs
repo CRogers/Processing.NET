@@ -186,53 +186,49 @@ namespace Processing.NET
             Polygon, Points, Lines, Triangles, TriangleStrip, TriangleFan, Quads, QuadStrip
         }
 
-        private List<Tuple<double, double>> verticies = new List<Tuple<double, double>>();
+        private List<PVector> verticies = new List<PVector>();
+        private BeginMode? beginMode = null;
 
         protected void BeginShape(ShapeMode mode = ShapeMode.Polygon)
         {
-            BeginMode bm = BeginMode.Polygon;
+            beginMode = (BeginMode) Enum.Parse(typeof (BeginMode), mode.ToString());
 
-            switch (mode)
-            {
-                case ShapeMode.Lines:
-                    bm = BeginMode.Lines;
-                    break;
-
-                case ShapeMode.Points:
-                    bm = BeginMode.Points;
-                    break;
-
-                case ShapeMode.Triangles:
-                    bm = BeginMode.Triangles;
-                    break;
-
-                case ShapeMode.TriangleStrip:
-                    bm = BeginMode.TriangleStrip;
-                    break;
-
-                case ShapeMode.Quads:
-                    bm = BeginMode.Quads;
-                    break;
-
-                case ShapeMode.QuadStrip:
-                    bm = BeginMode.QuadStrip;
-                    break;
-            }
-
-            GL.Begin(bm);
+            verticies.Clear();
         }
 
         protected void Vertex(double x, double y)
         {
             Sxy(ref x,ref y);
 
-            verticies.Add(Tuple.Create(x,y));
-            GL.Vertex2(x,y);
+            verticies.Add(new PVector(x, y));
         }
 
         protected void EndShape()
         {
+            if (beginMode == null)
+                throw new ProcessingException("Call BeginShape() before EndShape()");
+            
+            // BUG: Fill correct colour to use for Lines and Points?
+            GL.Color4(Fill);
+            GL.Begin((BeginMode)beginMode);
+            {
+                foreach (var v in verticies)
+                    GL.Vertex2(v.X, v.Y);
+            }
             GL.End();
+
+            if (!beginMode.AnyOf(BeginMode.Lines, BeginMode.Points))
+            {
+                GL.Color4(Stroke);
+                GL.Begin(BeginMode.LineLoop);
+                {
+                    foreach (var v in verticies)
+                        GL.Vertex2(v.X, v.Y);
+                }
+                GL.End();
+            }
+
+            beginMode = null;
         }
     }
 }

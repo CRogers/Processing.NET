@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ProcessingApp.cs" />
+    <Compile Include="ProcessingException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PVector.cs" />
   </ItemGroup>
