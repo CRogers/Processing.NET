@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -176,6 +178,60 @@ namespace Processing.NET
                 GL.Vertex2(x2, y2);
                 GL.Vertex2(x3, y3);
             }
+            GL.End();
+        }
+
+        protected enum ShapeMode
+        {
+            Polygon, Points, Lines, Triangles, TriangleStrip, TriangleFan, Quads, QuadStrip
+        }
+
+        private List<Tuple<double, double>> verticies = new List<Tuple<double, double>>();
+
+        protected void BeginShape(ShapeMode mode = ShapeMode.Polygon)
+        {
+            BeginMode bm = BeginMode.Polygon;
+
+            switch (mode)
+            {
+                case ShapeMode.Lines:
+                    bm = BeginMode.Lines;
+                    break;
+
+                case ShapeMode.Points:
+                    bm = BeginMode.Points;
+                    break;
+
+                case ShapeMode.Triangles:
+                    bm = BeginMode.Triangles;
+                    break;
+
+                case ShapeMode.TriangleStrip:
+                    bm = BeginMode.TriangleStrip;
+                    break;
+
+                case ShapeMode.Quads:
+                    bm = BeginMode.Quads;
+                    break;
+
+                case ShapeMode.QuadStrip:
+                    bm = BeginMode.QuadStrip;
+                    break;
+            }
+
+            GL.Begin(bm);
+        }
+
+        protected void Vertex(double x, double y)
+        {
+            Sxy(ref x,ref y);
+
+            verticies.Add(Tuple.Create(x,y));
+            GL.Vertex2(x,y);
+        }
+
+        protected void EndShape()
+        {
             GL.End();
         }
     }
