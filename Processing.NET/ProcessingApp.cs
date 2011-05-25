@@ -15,6 +15,10 @@ namespace Processing.NET
         protected Color Stroke { get; set; }
         protected Color Fill { get; set; }
 
+        protected const double HalfPI = Math.PI/2.0;
+        protected const double PI = Math.PI;
+        protected const double TwoPI = Math.PI*2;
+
         protected ProcessingApp(int smoothSamples = 1) : base(800, 600, new GraphicsMode(32,24,8,smoothSamples), "Processing.NET")
         {
         }
@@ -189,22 +193,35 @@ namespace Processing.NET
             GL.Color4(Fill);
             GL.Begin(BeginMode.Polygon);
             {
-                EllipseDrawVerticies(x, y, width, height);
+                ArcDrawVerticies(x, y, width, height, 0, TwoPI);
             }
             GL.End();
 
             GL.Color4(Stroke);
             GL.Begin(BeginMode.LineLoop);
             {
-                EllipseDrawVerticies(x, y, width, height);
+                ArcDrawVerticies(x, y, width, height, 0, TwoPI);
             }
             GL.End();
         }
 
-        private void EllipseDrawVerticies(double sx, double sy, double swidth, double sheight)
+        protected void Arc(double x, double y, double width, double height, double start, double end)
+        {
+            Sxy(ref x, ref y);
+            Swh(ref width, ref height);
+
+            GL.Color4(Stroke);
+            GL.Begin(BeginMode.LineStrip);
+            {
+                ArcDrawVerticies(x, y, width, height, start, end);
+            }
+            GL.End();
+        }
+
+        private void ArcDrawVerticies(double sx, double sy, double swidth, double sheight, double start, double end)
         {
             double step = 1.0 / Math.Min(Width,Height) / Math.Max(Math.Abs(swidth), Math.Abs(sheight));
-            for (double ang = 0.0; ang < Math.PI * 2; ang += step)
+            for (double ang = start; ang < end; ang += step)
                 GL.Vertex2(sx + swidth*Math.Cos(ang),sy + sheight*Math.Sin(ang));
         }
 

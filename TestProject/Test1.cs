@@ -40,6 +40,8 @@ namespace TestProject
             EndShape();
 
             Ellipse(350,300,50+step,200);
+
+            Arc(100,100,50,50,HalfPI/2,HalfPI*3);
         }
     }
 }
