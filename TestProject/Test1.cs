@@ -8,13 +8,18 @@ namespace TestProject
         private int step = 0;
         private int x = 0, y = 0;
 
+        public Test1() : base(4)
+        {
+        }
+
         protected override void Draw()
         {
             Background(Color.FromArgb(step, step, step));
             step = (step + 1)%255;
 
-            Fill = Color.Crimson;
-            Rect(x = (++x % Width),y = (++y % Height),100,100);
+            Fill = Color.White;
+            Rect(10, 10, Width - 20, Height - 20);
+            //Rect(x = (++x % Width),y = (++y % Height),100,100);
 
             Fill = Color.ForestGreen;
             Point(Width-100, 50);
@@ -33,6 +38,8 @@ namespace TestProject
             Vertex(400,400);
             Vertex(370,370);
             EndShape();
+
+            Ellipse(350,300,50+step,200);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Processing.NET
         protected Color Stroke { get; set; }
         protected Color Fill { get; set; }
 
-        protected ProcessingApp() : base(800, 600, GraphicsMode.Default, "Processing.NET")
+        protected ProcessingApp(int smoothSamples = 1) : base(800, 600, new GraphicsMode(32,24,8,smoothSamples), "Processing.NET")
         {
         }
 
@@ -179,6 +179,33 @@ namespace Processing.NET
                 GL.Vertex2(x3, y3);
             }
             GL.End();
+        }
+
+        protected void Ellipse(double x, double y, double width, double height)
+        {
+            Sxy(ref x, ref y);
+            Swh(ref width, ref height);
+
+            GL.Color4(Fill);
+            GL.Begin(BeginMode.Polygon);
+            {
+                EllipseDrawVerticies(x, y, width, height);
+            }
+            GL.End();
+
+            GL.Color4(Stroke);
+            GL.Begin(BeginMode.LineLoop);
+            {
+                EllipseDrawVerticies(x, y, width, height);
+            }
+            GL.End();
+        }
+
+        private void EllipseDrawVerticies(double sx, double sy, double swidth, double sheight)
+        {
+            double step = 1.0 / Math.Min(Width,Height) / Math.Max(Math.Abs(swidth), Math.Abs(sheight));
+            for (double ang = 0.0; ang < Math.PI * 2; ang += step)
+                GL.Vertex2(sx + swidth*Math.Cos(ang),sy + sheight*Math.Sin(ang));
         }
 
         protected enum ShapeMode
