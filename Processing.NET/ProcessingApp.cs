@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics;
@@ -25,6 +26,8 @@ namespace Processing.NET
         protected Color Stroke { get; set; }
         protected Color Fill { get; set; }
 
+        protected Color[] pixels;
+
         protected const double HalfPI = Math.PI/2.0;
         protected const double PI = Math.PI;
         protected const double TwoPI = Math.PI*2;
@@ -43,6 +46,9 @@ namespace Processing.NET
         protected double PMouseX { get; private set; }
         protected double PMouseY { get; private set; }
 
+        protected bool MousePressed { get; private set; }
+        protected MouseButton MouseButton { get; private set; }
+
         protected ProcessingApp(int smoothSamples = 1) : base(800, 600, new GraphicsMode(32,24,8,smoothSamples), "Processing.NET")
         {
         }
@@ -52,7 +58,12 @@ namespace Processing.NET
         {
             Width = 800;
             Height = 600;
+            pixels = new Color[Width * Height];
             Background(Color.Gray);
+
+            Mouse.ButtonDown += (o, e) => { MouseButton = e.Button; MousePressed = true; };
+            Mouse.ButtonUp += (o, e) => MousePressed = false;
+            Mouse.ButtonDown += (o, e) => OnMousePressed();
         }
 
         protected virtual void Setup()
@@ -73,8 +84,8 @@ namespace Processing.NET
 
         protected override void OnLoad(System.EventArgs e)
         {
-            base.OnLoad(e);
             InitialSetup();
+            base.OnLoad(e);
             Setup();
         }
         
@@ -94,6 +105,14 @@ namespace Processing.NET
 
             PMouseX = MouseX;
             PMouseY = MouseY;
+        }
+
+
+        protected double Dist(double x1, double y1, double x2, double y2)
+        {
+            var xd = x1 - x2;
+            var yd = y1 - y2;
+            return Math.Sqrt(xd*xd - yd*yd);
         }
 
 
@@ -354,6 +373,34 @@ namespace Processing.NET
         }
 
 
+
+        protected void LoadPixels()
+        {
+            int wxh = Width*Height*3;
+            var arr = new byte[wxh];
+            GL.ReadPixels(0,0,Width,Height,PixelFormat.Rgb,PixelType.Byte,arr);
+
+            for (int i = 0; i < wxh; i += 3)
+                pixels[i/4] = Color.FromArgb(arr[i], arr[i + 1], arr[i + 2]);
+        }
+
+        protected void UpdatePixels()
+        {
+            int wxh = Width*Height*3;
+            int[] arr = new int[wxh];
+
+            for(int i = 0; i < wxh; i += 3)
+            {
+                var c = pixels[i/4];
+                arr[i] = c.R;
+                arr[i + 1] = c.G;
+                arr[i + 2] = c.B;
+            }
+
+            GL.DrawPixels(Width,Height,PixelFormat.Rgb, PixelType.Byte, arr);
+        }
+
+
         protected double Random(double high)
         {
             return random.NextDouble() * high;
@@ -390,5 +437,12 @@ namespace Processing.NET
 
             throw new NotImplementedException();
         }
+
+
+        protected virtual void OnMousePressed() {}
+
+        protected virtual void OnMouseMoved() {}
+
+        protected virtual void OnMouseReleased() {}
     }
 }

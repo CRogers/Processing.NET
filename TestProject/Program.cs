@@ -10,8 +10,8 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
-            var t1 = new Test1();
-            t1.Run(30.0);
+            var t1 = new PixelTest();
+            t1.Run(2.0);
         }
     }
 }

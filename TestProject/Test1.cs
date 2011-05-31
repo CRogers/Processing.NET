@@ -49,6 +49,14 @@ namespace TestProject
             PopMatrix();
 
             Arc(100,100,50,50,HalfPI/2,HalfPI*3);
+
+            Stroke = Color.Fuchsia;
+            Line(MouseX, MouseY, PMouseX, PMouseY);
+        }
+
+        protected override void OnMousePressed()
+        {
+            Rect(MouseX, MouseY, 100, 100);
         }
     }
 }
